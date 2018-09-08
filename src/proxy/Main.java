@@ -8,7 +8,7 @@ public class Main {
         Integer[] mas = {1, 3, 4, 5, 3};
         ObjectBox realMathBox = new MathBox(mas);
         ObjectBox mathBoxProxy = (ObjectBox) Proxy.newProxyInstance(MathBoxInvocationHandler.class.getClassLoader(),
-                new Class[]{ObjectBox.class}, new MathBoxInvocationHandler(realMathBox));
+                MathBox.class.getInterfaces(), new MathBoxInvocationHandler(realMathBox));
         System.out.println(mathBoxProxy.summator());
     }
 }

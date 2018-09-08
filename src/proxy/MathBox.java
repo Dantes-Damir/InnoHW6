@@ -15,7 +15,7 @@ public class MathBox implements ObjectBox {
         }
     }
 
-    @Override
+
     @ClearData
     public Double summator() {
         Double sum = 0.0;

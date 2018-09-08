@@ -3,6 +3,7 @@ package proxy;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.TreeSet;
 
 public class MathBoxInvocationHandler implements InvocationHandler {
     private ObjectBox mathBox;
@@ -14,11 +15,19 @@ public class MathBoxInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Class clazz = mathBox.getClass();
-        if (method.getAnnotation(ClearData.class) != null) {
-            Field containerField = mathBox.getClass().getDeclaredField("sortedSet");
-            containerField.setAccessible(true);
+        Method[] methods = mathBox.getClass().getMethods();
+        System.out.println(method.getName());
+        for (Method m : methods) {
 
+            if (m.getName().equals(method.getName()) && method.getAnnotation(ClearData.class) != null) {
+
+                Field containerField = mathBox.getClass().getDeclaredField("sortedSet");
+                containerField.setAccessible(true);
+                containerField.set(mathBox, new TreeSet<Integer>());
+
+            }
         }
+
         if (mathBox.getClass().getAnnotation(Logged.class) != null) {
             long startTime = System.currentTimeMillis();
             System.out.println("We call method " + method.getName());
@@ -29,5 +38,6 @@ public class MathBoxInvocationHandler implements InvocationHandler {
         } else {
             return method.invoke(mathBox, args);
         }
+
     }
 }
